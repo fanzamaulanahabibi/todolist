@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>To-Do List</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Box Gabungan: Identitas, Tugas, dan Output -->
+  <div class="identity-form">
+    <h2>Masukkan Identitas & Tugas</h2>
+    <form id="form-gabungan">
+      <input type="text" id="input-nama" placeholder="Nama" required>
+      <input type="text" id="input-nim" placeholder="NIM" required>
+      <input type="text" id="input-kelas" placeholder="Kelas" required>
+      <input type="date" id="input-tanggal" required>
+      <button type="submit">Simpan dan Tambah</button>
+    </form>
+
+    <!-- Tampilkan Identitas dan Daftar Tugas -->
+    <div id="output-box" style="display: none; margin-top: 20px;">
+      <div class="identity-display">
+        <p>Nama: <span id="nama"></span></p>
+        <p>NIM: <span id="nim"></span></p>
+        <p>Kelas: <span id="kelas"></span></p>
+        <p>Tanggal: <span id="tanggal"></span></p>
+      </div>
+
+      <div style="margin-top: 20px;">
+        <h3>Daftar Tugas</h3>
+        <ul id="todo-list"></ul>
+        <form id="todo-form" style="margin-top: 10px; display: flex; gap: 10px;">
+          <input type="text" id="tugas-baru" placeholder="Tambah tugas..." required>
+          <button type="submit">Tambah</button>
+          <button type="button" id="hapus-semua" style="background-color: red; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer;">Hapus Semua</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const formGabungan = document.getElementById("form-gabungan");
+    const outputBox = document.getElementById("output-box");
+    const list = document.getElementById("todo-list");
+
+    formGabungan.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      // Ambil input
+      const nama = document.getElementById("input-nama").value;
+      const nim = document.getElementById("input-nim").value;
+      const kelas = document.getElementById("input-kelas").value;
+      const tanggal = document.getElementById("input-tanggal").value;
+
+      // Tampilkan identitas
+      document.getElementById("nama").textContent = nama;
+      document.getElementById("nim").textContent = nim;
+      document.getElementById("kelas").textContent = kelas;
+      document.getElementById("tanggal").textContent = new Date(tanggal).toLocaleDateString("id-ID", {
+        weekday: "long", year: "numeric", month: "long", day: "numeric"
+      });
+
+      formGabungan.style.display = "none";
+      outputBox.style.display = "block";
+    });
+
+    const todoForm = document.getElementById("todo-form");
+    const hapusSemuaBtn = document.getElementById("hapus-semua");
+
+    todoForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const tugasBaru = document.getElementById("tugas-baru").value.trim();
+      if (tugasBaru !== "") {
+        tambahTugas(tugasBaru);
+        document.getElementById("tugas-baru").value = "";
+      }
+    });
+
+    hapusSemuaBtn.addEventListener("click", function () {
+      list.innerHTML = "";
+    });
+
+    function tambahTugas(teks) {
+      const li = document.createElement("li");
+      li.textContent = teks;
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.textContent = "Hapus";
+      deleteBtn.classList.add("delete-btn");
+      deleteBtn.style.marginLeft = "10px";
+
+      deleteBtn.addEventListener("click", () => {
+        li.remove();
+      });
+
+      li.appendChild(deleteBtn);
+      list.appendChild(li);
+    }
+  </script>
+</body>
+</html>
